@@ -66,33 +66,30 @@ const AppProvider = ({ children }) => {
 
 
     const increment = id => {
-        let tempCart = cart;
-        const selectedProduct = tempCart.find(item => {
+
+        const selectedProduct = cart.find(item => {
             return item.id === id;
         });
-        const index = tempCart.indexOf(selectedProduct);
-        const product = tempCart[index];
+        const index = cart.indexOf(selectedProduct);
+        const product = cart[index];
         product.count = product.count + 1;
         product.total = product.count * product.price;
-        setCart(tempCart);
         addTotals();
 
 
     };
 
     const decrement = id => {
-        let tempCart = [...cart];
-        const selectedProduct = tempCart.find(item => {
+        const selectedProduct = cart.find(item => {
             return item.id === id;
         });
-        const index = tempCart.indexOf(selectedProduct);
-        const product = tempCart[index];
+        const index = cart.indexOf(selectedProduct);
+        const product = cart[index];
         product.count = product.count - 1;
         if (product.count === 0) {
             removeItem(id);
         } else {
             product.total = product.count * product.price;
-            setCart(tempCart)
         };
         addTotals();
     };
@@ -113,7 +110,7 @@ const AppProvider = ({ children }) => {
         // const tax = parseFloat((gst + qst).toFixed(2));
         const total = subTotal + taxGst + taxQst;
         return {
-            subTotal,taxGst, taxQst, total
+            subTotal, taxGst, taxQst, total
         };
     };
 
@@ -130,22 +127,16 @@ const AppProvider = ({ children }) => {
 
 
     const removeItem = id => {
-       
-        let tempCart = [...cart];
-
         const index = products.indexOf(getItem(id));
         let removedProduct = products[index];
         removedProduct.inCart = false;
         removedProduct.count = 0;
         removedProduct.total = 0;
 
-        tempCart = tempCart.filter(item => {
+        let tempCart = cart.filter(item => {
             return item.id !== id;
         });
-
-
         setCart(tempCart);
-       
         addTotals();
 
 
@@ -154,13 +145,13 @@ const AppProvider = ({ children }) => {
 
     const clearCart = () => {
         setCart([]);
-        products.map(product=>product.inCart = false)
+        products.map(product => product.inCart = false)
         addTotals();
     };
 
     return (
         <AppContext.Provider
-            value={{ products, detailProduct, cart, isModalOpen, cartSubTotal, cartTaxGst, cartTaxQst,cartTotal, modalProduct, handleDetail, addToCart, openModal, closeModal, increment, decrement, removeItem, clearCart }}
+            value={{ products, detailProduct, cart, isModalOpen, cartSubTotal, cartTaxGst, cartTaxQst, cartTotal, modalProduct, handleDetail, addToCart, openModal, closeModal, increment, decrement, removeItem, clearCart }}
         >
             {children}
         </AppContext.Provider>
